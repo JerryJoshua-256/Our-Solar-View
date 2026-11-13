@@ -23,9 +23,9 @@ const coarse = matchMedia('(pointer: coarse)').matches || Math.min(screen.width,
 const qp = new URLSearchParams(location.search);
 const TIER_NAME = qp.get('q') || (coarse ? 'mobile' : 'desktop');
 const TIERS = {
-  desktop: { stars: 9000, dpr: 2 },
-  mobile:  { stars: 4500, dpr: 1.6 },
-  low:     { stars: 2200, dpr: 1 }
+  desktop: { stars: 5000, dpr: 2 },
+  mobile:  { stars: 1800, dpr: 1.5 },
+  low:     { stars: 900, dpr: 1 }
 };
 const TIER = TIERS[TIER_NAME] || TIERS.desktop;
 
@@ -35,14 +35,18 @@ const NEAR = 0.4, FAR = 400;
 
 function fail(err) {
   console.warn('3D scene unavailable', err);
-  loadingEl.textContent = 'The cosmos awaits';
-  setTimeout(() => loadingEl.classList.add('done'), 2200);
+  if (loadingEl) {
+    loadingEl.textContent = 'Scene error — try refreshing';
+    loadingEl.classList.remove('done');
+  }
 }
 
 const gl = canvas.getContext('webgl', {
-  alpha: false, antialias: false, depth: true, stencil: false,
-  powerPreference: 'high-performance', preserveDrawingBuffer: false
-}) || canvas.getContext('experimental-webgl');
+  alpha: false, antialias: true, depth: true, stencil: false,
+  preserveDrawingBuffer: false
+}) || canvas.getContext('experimental-webgl', {
+  alpha: false, depth: true
+});
 if (!gl) { fail('no webgl'); return; }
 
 /* ───────── math ───────── */
@@ -89,7 +93,7 @@ function mulberry(seed) {
 /* ───────── planet data ───────── */
 const PLANETS = [
   {
-    name: 'Mercury', radius: 0.18, dist: 8.0, speed: 0.38, color: [0.78,0.74,0.68],
+    name: 'Mercury', radius: 0.32, dist: 7.0, speed: 0.38, color: [0.78,0.74,0.68],
     tilt: 0.03, moons: [],
     info: {
       type: 'Terrestrial',
@@ -101,7 +105,7 @@ const PLANETS = [
     }
   },
   {
-    name: 'Venus', radius: 0.42, dist: 11.0, speed: 0.29, color: [0.95,0.82,0.5],
+    name: 'Venus', radius: 0.72, dist: 10.0, speed: 0.29, color: [0.95,0.82,0.5],
     tilt: 3.1, moons: [],
     info: {
       type: 'Terrestrial',
@@ -113,7 +117,7 @@ const PLANETS = [
     }
   },
   {
-    name: 'Earth', radius: 0.45, dist: 14.5, speed: 0.24, color: [0.32,0.55,0.92],
+    name: 'Earth', radius: 0.78, dist: 13.5, speed: 0.24, color: [0.32,0.55,0.92],
     tilt: 0.41, moons: [
       { name: 'Moon', radius: 0.12, dist: 1.6, speed: 0.55, color: [0.75,0.75,0.72] }
     ],
@@ -127,7 +131,7 @@ const PLANETS = [
     }
   },
   {
-    name: 'Mars', radius: 0.28, dist: 18.5, speed: 0.20, color: [0.88,0.48,0.32],
+    name: 'Mars', radius: 0.48, dist: 17.5, speed: 0.20, color: [0.88,0.48,0.32],
     tilt: 0.44, moons: [
       { name: 'Phobos', radius: 0.05, dist: 1.2, speed: 0.95, color: [0.55,0.5,0.45] },
       { name: 'Deimos', radius: 0.035, dist: 1.7, speed: 0.60, color: [0.5,0.48,0.42] }
@@ -142,7 +146,7 @@ const PLANETS = [
     }
   },
   {
-    name: 'Jupiter', radius: 1.35, dist: 26.0, speed: 0.11, color: [0.82,0.68,0.48],
+    name: 'Jupiter', radius: 2.1, dist: 25.0, speed: 0.11, color: [0.82,0.68,0.48],
     tilt: 0.05, hasRing: false, moons: [
       { name: 'Io', radius: 0.14, dist: 2.8, speed: 0.72, color: [0.9,0.75,0.35] },
       { name: 'Europa', radius: 0.12, dist: 3.4, speed: 0.58, color: [0.85,0.88,0.92] },
@@ -159,7 +163,7 @@ const PLANETS = [
     }
   },
   {
-    name: 'Saturn', radius: 1.15, dist: 34.0, speed: 0.08, color: [0.9,0.8,0.55],
+    name: 'Saturn', radius: 1.8, dist: 33.0, speed: 0.08, color: [0.9,0.8,0.55],
     tilt: 0.47, hasRing: true, moons: [
       { name: 'Titan', radius: 0.15, dist: 3.6, speed: 0.40, color: [0.85,0.7,0.4] },
       { name: 'Rhea', radius: 0.08, dist: 2.8, speed: 0.55, color: [0.75,0.75,0.72] },
@@ -175,7 +179,7 @@ const PLANETS = [
     }
   },
   {
-    name: 'Uranus', radius: 0.75, dist: 42.0, speed: 0.055, color: [0.55,0.82,0.88],
+    name: 'Uranus', radius: 1.15, dist: 41.0, speed: 0.055, color: [0.55,0.82,0.88],
     tilt: 1.71, hasRing: true, moons: [
       { name: 'Titania', radius: 0.08, dist: 2.5, speed: 0.48, color: [0.7,0.72,0.75] },
       { name: 'Oberon', radius: 0.07, dist: 3.0, speed: 0.38, color: [0.65,0.65,0.68] }
@@ -190,7 +194,7 @@ const PLANETS = [
     }
   },
   {
-    name: 'Neptune', radius: 0.72, dist: 49.0, speed: 0.045, color: [0.28,0.42,0.85],
+    name: 'Neptune', radius: 1.1, dist: 48.0, speed: 0.045, color: [0.28,0.42,0.85],
     tilt: 0.49, hasRing: false, moons: [
       { name: 'Triton', radius: 0.11, dist: 2.8, speed: 0.42, color: [0.75,0.8,0.85] }
     ],
@@ -204,7 +208,7 @@ const PLANETS = [
     }
   },
   {
-    name: 'Pluto', radius: 0.16, dist: 56.0, speed: 0.03, color: [0.72,0.62,0.55],
+    name: 'Pluto', radius: 0.28, dist: 54.0, speed: 0.03, color: [0.72,0.62,0.55],
     tilt: 1.05, moons: [
       { name: 'Charon', radius: 0.08, dist: 1.4, speed: 0.48, color: [0.6,0.58,0.55] }
     ],
@@ -417,8 +421,8 @@ let S = null;
 let raf = 0, running = false, visible = true;
 let pr = 1, W = 1, H = 1, aspect = 1.6;
 let time = 0, last = 0;
-let yaw = 0.55, pitch = 0.28, yawT = 0.55, pitchT = 0.28, yawVel = 0;
-let dist = 72, distBase = 72, distT = 72;
+let yaw = 0.6, pitch = 0.32, yawT = 0.6, pitchT = 0.32, yawVel = 0;
+let dist = 58, distBase = 58, distT = 58;
 let mx = 0, my = 0, mxS = 0, myS = 0;
 let dragging = false, lastX = 0, lastY = 0;
 let lastTap = 0, tapCount = 0;
@@ -510,7 +514,7 @@ function build() {
 
   const B = S.buf;
   B.quad = buf(new Float32Array([-1,-1, 1,-1, -1,1, 1,1]));
-  const sph = makeSphere(3);
+  const sph = makeSphere(2);
   B.sphere = buf(sph.pos);
   B.sphereIdx = buf(sph.idx, gl.ELEMENT_ARRAY_BUFFER);
   S.sphereCount = sph.count;
@@ -653,7 +657,7 @@ function render() {
   const px = W / Math.max(1, hero.clientWidth);
 
   gl.viewport(0, 0, W, H);
-  gl.clearColor(0.008, 0.015, 0.04, 1);
+  gl.clearColor(0.015, 0.025, 0.06, 1);
   gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   gl.enable(gl.DEPTH_TEST);
   gl.depthFunc(gl.LEQUAL);
@@ -675,7 +679,7 @@ function render() {
   if (mode === 'system') {
     // ─── solar system view ───
     // Sun (larger + brighter)
-    setModel(model, 0, 0, 0, 1.9, t * 0.12);
+    setModel(model, 0, 0, 0, 2.4, t * 0.12);
     p = P.sun; gl.useProgram(p.p);
     gl.uniformMatrix4fv(p.u.uVP, false, vp);
     gl.uniformMatrix4fv(p.u.uModel, false, model);
@@ -690,7 +694,7 @@ function render() {
     p = P.corona; gl.useProgram(p.p);
     gl.uniformMatrix4fv(p.u.uVP, false, vp);
     gl.uniform3fv(p.u.uR, right); gl.uniform3fv(p.u.uU, up);
-    gl.uniform1f(p.u.uS, 3.6); gl.uniform1f(p.u.uTime, t);
+    gl.uniform1f(p.u.uS, 4.5); gl.uniform1f(p.u.uTime, t);
     attr(p, 'aP', B.quad, 2); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); endAttrs();
     gl.depthMask(true); gl.disable(gl.BLEND);
 
@@ -899,7 +903,7 @@ function resize() {
   aspect = W / H;
   // adjust base distance for aspect
   // first-person / astronaut framing — closer so the system fills the view
-  distBase = aspect < 0.8 ? 95 : (aspect > 1.6 ? 62 : 72);
+  distBase = aspect < 0.8 ? 78 : (aspect > 1.6 ? 52 : 58);
   if (mode === 'system') distT = distBase;
 }
 
@@ -985,7 +989,12 @@ try {
   build();
   resize();
   canvas.classList.add('ready');
-  loadingEl.classList.add('done');
+  if (loadingEl) loadingEl.classList.add('done');
   start();
-} catch (err) { fail(err); }
+  console.log('ORBIT scene started');
+} catch (err) {
+  fail(err);
+  // still show canvas background so user sees something
+  canvas.classList.add('ready');
+}
 })();
