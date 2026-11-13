@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#02040c">
+<meta name="description" content="ORBIT — an immersive interactive 3D solar system. Explore the Sun and nine planets, then dive into each world and its moons.">
+<title>ORBIT — Solar System</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Ccircle cx='24' cy='24' r='10' fill='%23ffcc33'/%3E%3Ccircle cx='24' cy='24' r='18' fill='none' stroke='%23ffaa22' stroke-width='1.5' opacity='.5'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400&family=Manrope:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme:dark;
+  --ice:#e8f4ff;
+  --gold:#ffcc55;
+  --pad:clamp(18px,5vw,72px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:#02040c;color:#f4f7ff;font-family:Manrope,system-ui,sans-serif;overflow:hidden;height:100vh;height:100dvh}
+
+.hero{position:relative;width:100%;height:100vh;height:100dvh;isolation:isolate;overflow:hidden;background:#02040c}
+#universe{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;opacity:0;transition:opacity 1.6s ease;cursor:grab}
+#universe.ready{opacity:1}
+#universe.dragging{cursor:grabbing}
+.vignette{position:absolute;inset:0;z-index:1;pointer-events:none;background:
+  radial-gradient(ellipse at 50% 50%,transparent 40%,rgba(2,4,12,.55) 100%),
+  linear-gradient(180deg,rgba(2,4,12,.35),transparent 18%,transparent 75%,#02040c 100%)}
+
+header{position:absolute;top:0;left:0;right:0;z-index:10;height:78px;padding:0 var(--pad);display:flex;align-items:center;justify-content:space-between;pointer-events:none}
+header>*{pointer-events:auto}
+.brand{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none;font:500 14px Manrope,sans-serif;letter-spacing:.04em}
+.brand-mark{width:32px;height:32px}
+.brand span{opacity:.92}
+
+.hero-copy{position:absolute;z-index:5;left:50%;top:12%;transform:translateX(-50%);text-align:center;width:min(92vw,640px);pointer-events:none;transition:opacity .7s,transform .7s}
+.hero-copy.hidden{opacity:0;transform:translateX(-50%) translateY(-18px)}
+.eyebrow{font:10px 'DM Mono',monospace;letter-spacing:.32em;text-transform:uppercase;color:#9ec8ff;margin-bottom:10px}
+h1{font-weight:300;font-size:clamp(28px,5.5vw,48px);letter-spacing:-.04em;line-height:1.15;margin:0 0 10px}
+h1 em{font-style:normal;color:var(--gold)}
+.subtitle{font-size:13px;line-height:1.7;color:#a8b8d0;max-width:420px;margin:0 auto}
+
+.hud{position:absolute;z-index:6;bottom:28px;left:var(--pad);font:9px 'DM Mono',monospace;letter-spacing:.18em;color:#8aa8c8;text-transform:uppercase;pointer-events:none;line-height:1.7}
+.hud-right{left:auto;right:var(--pad);text-align:right}
+.hud b{font-weight:400;color:#c8e0ff}
+
+.hint{position:absolute;z-index:6;bottom:28px;left:50%;transform:translateX(-50%);font:9px 'DM Mono',monospace;letter-spacing:.2em;color:#7a9ab8;text-transform:uppercase;pointer-events:none;display:flex;align-items:center;gap:10px;transition:opacity .5s}
+.hint.hidden{opacity:0}
+.hint .dot{width:6px;height:6px;border-radius:50%;background:#5a8ab8;animation:pulse 2s ease infinite}
+@keyframes pulse{0%,100%{opacity:.4}50%{opacity:1}}
+
+.mode-label{position:absolute;z-index:8;left:50%;top:50%;transform:translate(-50%,-50%);font:11px 'DM Mono',monospace;letter-spacing:.28em;color:#ffd88a;text-transform:uppercase;opacity:0;transition:opacity .7s;pointer-events:none;text-shadow:0 0 30px #ffaa33}
+.mode-label.show{opacity:.95}
+
+/* Detail panel */
+.detail{position:absolute;z-index:12;left:0;right:0;bottom:0;padding:28px var(--pad) 36px;background:linear-gradient(180deg,transparent,rgba(2,6,18,.92) 28%);transform:translateY(110%);transition:transform .55s cubic-bezier(.22,1,.36,1);pointer-events:none}
+.detail.open{transform:translateY(0);pointer-events:auto}
+.detail-inner{max-width:720px;margin:0 auto}
+.detail-kicker{font:9px 'DM Mono',monospace;letter-spacing:.28em;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
+.detail h2{font-weight:400;font-size:clamp(22px,4vw,32px);margin:0 0 12px;letter-spacing:-.03em}
+.detail p{font-size:13.5px;line-height:1.75;color:#b8c8dc;margin:0 0 16px}
+.detail-meta{display:flex;flex-wrap:wrap;gap:18px 28px;font:11px 'DM Mono',monospace;color:#8aa8c8;letter-spacing:.06em}
+.detail-meta span{display:flex;flex-direction:column;gap:3px}
+.detail-meta b{font-weight:400;color:#d8e8ff;font-size:13px}
+
+.loading{position:absolute;z-index:20;left:50%;top:52%;transform:translate(-50%,-50%);font:10px 'DM Mono',monospace;letter-spacing:.28em;color:#a8c8e8;opacity:.8;transition:opacity .8s;text-transform:uppercase;pointer-events:none}
+.loading.done{opacity:0}
+
+.back-hint{position:absolute;z-index:7;top:90px;left:50%;transform:translateX(-50%);font:9px 'DM Mono',monospace;letter-spacing:.2em;color:#6a8ab0;text-transform:uppercase;opacity:0;transition:opacity .5s;pointer-events:none}
+.back-hint.show{opacity:.85}
+
+@media(max-width:640px){
+  header{height:64px}
+  .brand{font-size:13px}.brand-mark{width:28px;height:28px}
+  .hero-copy{top:11%}
+  .hud,.hud-right{display:none}
+  .hint{bottom:20px;font-size:8px}
+  .detail{padding:22px 20px 30px}
+  .detail-meta{gap:14px 20px}
+}
+@media(max-height:520px) and (orientation:landscape){
+  .hero-copy{top:8%}
+  h1{font-size:clamp(22px,5vw,34px);margin-bottom:6px}
+  .subtitle,.hint{display:none}
+  .back-hint{top:72px}
+}
+@media(prefers-reduced-motion:reduce){
+  *,*:before,*:after{animation:none!important;transition-duration:.01ms!important}
+}
+</style>
+</head>
+<body>
+<main>
+<section class="hero" id="top">
+  <canvas id="universe" aria-label="Interactive three-dimensional solar system. Drag to orbit. Click a planet to explore it and its moons."></canvas>
+  <div class="vignette"></div>
+
+  <header>
+    <a class="brand" href="#" id="brandLink" aria-label="ORBIT home">
+      <svg class="brand-mark" viewBox="0 0 48 48" aria-hidden="true">
+        <circle cx="24" cy="24" r="9" fill="#ffcc44"/>
+        <circle cx="24" cy="24" r="16" fill="none" stroke="#ffaa33" stroke-width="1.2" opacity=".55"/>
+        <circle cx="24" cy="24" r="21" fill="none" stroke="#ff9922" stroke-width=".8" opacity=".3"/>
+      </svg>
+      <span>ORBIT</span>
+    </a>
+  </header>
+
+  <div class="hero-copy" id="heroCopy">
+    <div class="eyebrow">First-person among the planets</div>
+    <h1>Nine worlds.<br>One <em>star.</em></h1>
+    <p class="subtitle">You are drifting through the solar system. Drag to look around. Tap any planet to fly closer and meet its moons.</p>
+  </div>
+
+  <div class="hud">SOLAR SYSTEM<br><b id="hudState">ASTRONAUT VIEW</b></div>
+  <div class="hud hud-right">LIVE 3D<br><span>LOOK AROUND</span></div>
+
+  <div class="hint" id="hint">
+    <span class="dot"></span>
+    <span>Tap a planet to explore</span>
+  </div>
+
+  <div class="mode-label" id="modeLabel">MERCURY</div>
+  <div class="back-hint" id="backHint">Double-tap for details · Triple-tap to return</div>
+
+  <div class="loading" id="loading">FORMING THE SYSTEM</div>
+
+  <div class="detail" id="detail">
+    <div class="detail-inner">
+      <div class="detail-kicker" id="detailKicker">PLANET</div>
+      <h2 id="detailTitle">Earth</h2>
+      <p id="detailDesc">Our home world. The only planet known to harbor life, with liquid water covering most of its surface and a protective atmosphere.</p>
+      <div class="detail-meta" id="detailMeta"></div>
+    </div>
+  </div>
+</section>
+</main>
+<script src="./assets/solar.js"></script>
+</body>
+</html>
