@@ -89,7 +89,7 @@ function mulberry(seed) {
 /* ───────── planet data ───────── */
 const PLANETS = [
   {
-    name: 'Mercury', radius: 0.48, dist: 6.2, speed: 0.38, color: [0.78,0.74,0.68],
+    name: 'Mercury', radius: 0.18, dist: 8.0, speed: 0.38, color: [0.78,0.74,0.68],
     tilt: 0.03, moons: [],
     info: {
       type: 'Terrestrial',
@@ -101,7 +101,7 @@ const PLANETS = [
     }
   },
   {
-    name: 'Venus', radius: 1.05, dist: 8.8, speed: 0.29, color: [0.95,0.82,0.5],
+    name: 'Venus', radius: 0.42, dist: 11.0, speed: 0.29, color: [0.95,0.82,0.5],
     tilt: 3.1, moons: [],
     info: {
       type: 'Terrestrial',
@@ -113,9 +113,9 @@ const PLANETS = [
     }
   },
   {
-    name: 'Earth', radius: 1.1, dist: 11.5, speed: 0.24, color: [0.32,0.55,0.92],
+    name: 'Earth', radius: 0.45, dist: 14.5, speed: 0.24, color: [0.32,0.55,0.92],
     tilt: 0.41, moons: [
-      { name: 'Moon', radius: 0.27, dist: 2.4, speed: 0.55, color: [0.75,0.75,0.72] }
+      { name: 'Moon', radius: 0.12, dist: 1.6, speed: 0.55, color: [0.75,0.75,0.72] }
     ],
     info: {
       type: 'Terrestrial',
@@ -127,10 +127,10 @@ const PLANETS = [
     }
   },
   {
-    name: 'Mars', radius: 0.68, dist: 14.8, speed: 0.20, color: [0.88,0.48,0.32],
+    name: 'Mars', radius: 0.28, dist: 18.5, speed: 0.20, color: [0.88,0.48,0.32],
     tilt: 0.44, moons: [
-      { name: 'Phobos', radius: 0.08, dist: 1.6, speed: 0.95, color: [0.55,0.5,0.45] },
-      { name: 'Deimos', radius: 0.05, dist: 2.3, speed: 0.60, color: [0.5,0.48,0.42] }
+      { name: 'Phobos', radius: 0.05, dist: 1.2, speed: 0.95, color: [0.55,0.5,0.45] },
+      { name: 'Deimos', radius: 0.035, dist: 1.7, speed: 0.60, color: [0.5,0.48,0.42] }
     ],
     info: {
       type: 'Terrestrial',
@@ -142,12 +142,12 @@ const PLANETS = [
     }
   },
   {
-    name: 'Jupiter', radius: 2.8, dist: 22.0, speed: 0.11, color: [0.82,0.68,0.48],
+    name: 'Jupiter', radius: 1.35, dist: 26.0, speed: 0.11, color: [0.82,0.68,0.48],
     tilt: 0.05, hasRing: false, moons: [
-      { name: 'Io', radius: 0.22, dist: 4.2, speed: 0.72, color: [0.9,0.75,0.35] },
-      { name: 'Europa', radius: 0.19, dist: 5.1, speed: 0.58, color: [0.85,0.88,0.92] },
-      { name: 'Ganymede', radius: 0.26, dist: 6.2, speed: 0.42, color: [0.65,0.62,0.58] },
-      { name: 'Callisto', radius: 0.24, dist: 7.4, speed: 0.31, color: [0.5,0.48,0.45] }
+      { name: 'Io', radius: 0.14, dist: 2.8, speed: 0.72, color: [0.9,0.75,0.35] },
+      { name: 'Europa', radius: 0.12, dist: 3.4, speed: 0.58, color: [0.85,0.88,0.92] },
+      { name: 'Ganymede', radius: 0.16, dist: 4.1, speed: 0.42, color: [0.65,0.62,0.58] },
+      { name: 'Callisto', radius: 0.15, dist: 4.9, speed: 0.31, color: [0.5,0.48,0.45] }
     ],
     info: {
       type: 'Gas Giant',
@@ -159,11 +159,11 @@ const PLANETS = [
     }
   },
   {
-    name: 'Saturn', radius: 2.35, dist: 29.5, speed: 0.08, color: [0.9,0.8,0.55],
+    name: 'Saturn', radius: 1.15, dist: 34.0, speed: 0.08, color: [0.9,0.8,0.55],
     tilt: 0.47, hasRing: true, moons: [
-      { name: 'Titan', radius: 0.25, dist: 5.8, speed: 0.40, color: [0.85,0.7,0.4] },
-      { name: 'Rhea', radius: 0.12, dist: 4.4, speed: 0.55, color: [0.75,0.75,0.72] },
-      { name: 'Enceladus', radius: 0.09, dist: 3.6, speed: 0.70, color: [0.9,0.92,0.95] }
+      { name: 'Titan', radius: 0.15, dist: 3.6, speed: 0.40, color: [0.85,0.7,0.4] },
+      { name: 'Rhea', radius: 0.08, dist: 2.8, speed: 0.55, color: [0.75,0.75,0.72] },
+      { name: 'Enceladus', radius: 0.06, dist: 2.3, speed: 0.70, color: [0.9,0.92,0.95] }
     ],
     info: {
       type: 'Gas Giant',
@@ -175,10 +175,10 @@ const PLANETS = [
     }
   },
   {
-    name: 'Uranus', radius: 1.55, dist: 36.5, speed: 0.055, color: [0.55,0.82,0.88],
+    name: 'Uranus', radius: 0.75, dist: 42.0, speed: 0.055, color: [0.55,0.82,0.88],
     tilt: 1.71, hasRing: true, moons: [
-      { name: 'Titania', radius: 0.12, dist: 3.8, speed: 0.48, color: [0.7,0.72,0.75] },
-      { name: 'Oberon', radius: 0.11, dist: 4.5, speed: 0.38, color: [0.65,0.65,0.68] }
+      { name: 'Titania', radius: 0.08, dist: 2.5, speed: 0.48, color: [0.7,0.72,0.75] },
+      { name: 'Oberon', radius: 0.07, dist: 3.0, speed: 0.38, color: [0.65,0.65,0.68] }
     ],
     info: {
       type: 'Ice Giant',
@@ -190,9 +190,9 @@ const PLANETS = [
     }
   },
   {
-    name: 'Neptune', radius: 1.5, dist: 42.5, speed: 0.045, color: [0.28,0.42,0.85],
+    name: 'Neptune', radius: 0.72, dist: 49.0, speed: 0.045, color: [0.28,0.42,0.85],
     tilt: 0.49, hasRing: false, moons: [
-      { name: 'Triton', radius: 0.18, dist: 4.2, speed: 0.42, color: [0.75,0.8,0.85] }
+      { name: 'Triton', radius: 0.11, dist: 2.8, speed: 0.42, color: [0.75,0.8,0.85] }
     ],
     info: {
       type: 'Ice Giant',
@@ -204,9 +204,9 @@ const PLANETS = [
     }
   },
   {
-    name: 'Pluto', radius: 0.28, dist: 49.0, speed: 0.03, color: [0.72,0.62,0.55],
+    name: 'Pluto', radius: 0.16, dist: 56.0, speed: 0.03, color: [0.72,0.62,0.55],
     tilt: 1.05, moons: [
-      { name: 'Charon', radius: 0.14, dist: 2.0, speed: 0.48, color: [0.6,0.58,0.55] }
+      { name: 'Charon', radius: 0.08, dist: 1.4, speed: 0.48, color: [0.6,0.58,0.55] }
     ],
     info: {
       type: 'Dwarf Planet',
@@ -417,8 +417,8 @@ let S = null;
 let raf = 0, running = false, visible = true;
 let pr = 1, W = 1, H = 1, aspect = 1.6;
 let time = 0, last = 0;
-let yaw = 0.65, pitch = 0.18, yawT = 0.65, pitchT = 0.18, yawVel = 0;
-let dist = 32, distBase = 32, distT = 32;
+let yaw = 0.55, pitch = 0.28, yawT = 0.55, pitchT = 0.28, yawVel = 0;
+let dist = 72, distBase = 72, distT = 72;
 let mx = 0, my = 0, mxS = 0, myS = 0;
 let dragging = false, lastX = 0, lastY = 0;
 let lastTap = 0, tapCount = 0;
@@ -675,7 +675,7 @@ function render() {
   if (mode === 'system') {
     // ─── solar system view ───
     // Sun (larger + brighter)
-    setModel(model, 0, 0, 0, 2.8, t * 0.12);
+    setModel(model, 0, 0, 0, 1.9, t * 0.12);
     p = P.sun; gl.useProgram(p.p);
     gl.uniformMatrix4fv(p.u.uVP, false, vp);
     gl.uniformMatrix4fv(p.u.uModel, false, model);
@@ -690,7 +690,7 @@ function render() {
     p = P.corona; gl.useProgram(p.p);
     gl.uniformMatrix4fv(p.u.uVP, false, vp);
     gl.uniform3fv(p.u.uR, right); gl.uniform3fv(p.u.uU, up);
-    gl.uniform1f(p.u.uS, 5.2); gl.uniform1f(p.u.uTime, t);
+    gl.uniform1f(p.u.uS, 3.6); gl.uniform1f(p.u.uTime, t);
     attr(p, 'aP', B.quad, 2); gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4); endAttrs();
     gl.depthMask(true); gl.disable(gl.BLEND);
 
@@ -738,9 +738,9 @@ function render() {
       gl.depthMask(false);
       p = P.label; gl.useProgram(p.p);
       gl.uniformMatrix4fv(p.u.uVP, false, vp);
-      gl.uniform3f(p.u.uPos, px_, pl.radius + 0.9, pz_);
+      gl.uniform3f(p.u.uPos, px_, pl.radius + 1.2, pz_);
       gl.uniform3fv(p.u.uR, right); gl.uniform3fv(p.u.uU, up);
-      gl.uniform1f(p.u.uScale, 1.5 + pl.radius * 0.15);
+      gl.uniform1f(p.u.uScale, 2.1 + pl.radius * 0.4);
       gl.uniform1f(p.u.uAlpha, 0.9);
       gl.activeTexture(gl.TEXTURE0);
       gl.bindTexture(gl.TEXTURE_2D, makeLabelTexture(pl.name));
@@ -752,7 +752,7 @@ function render() {
   } else if (mode === 'planet' && focusPlanet >= 0) {
     // ─── single planet + moons view ───
     const pl = PLANETS[focusPlanet];
-    const focusScale = 4.0;   // larger planet for immersive first-person view
+    const focusScale = 3.6;   // immersive when zoomed into a planet
     const spin = t * 0.28;
 
     // planet
@@ -862,7 +862,7 @@ function frame(now) {
   // zoom transition
   if (mode === 'planet') {
     zoomT = Math.min(1, zoomT + dt * 1.4);
-    distT = 11.5;          // closer, more first-person feel on planet page
+    distT = 12.5;          // immersive first-person feel on planet page
   } else {
     zoomT = Math.max(0, zoomT - dt * 1.6);
     distT = distBase;
@@ -899,7 +899,7 @@ function resize() {
   aspect = W / H;
   // adjust base distance for aspect
   // first-person / astronaut framing — closer so the system fills the view
-  distBase = aspect < 0.8 ? 42 : (aspect > 1.6 ? 28 : 32);
+  distBase = aspect < 0.8 ? 95 : (aspect > 1.6 ? 62 : 72);
   if (mode === 'system') distT = distBase;
 }
 
